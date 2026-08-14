@@ -9,6 +9,7 @@ export default function Admin({
   news, setNews,
   blogs, setBlogs,
   team, setTeam,
+  refreshSiteData,
 }) {
   const [token, setToken] = useState(null);
   const [email, setEmail] = useState('');
@@ -64,10 +65,10 @@ export default function Admin({
         </div>
 
         <div className="admin-grid">
-          <PublicationPanel token={token} publications={publications} setPublications={setPublications} />
-          <NewsPanel token={token} news={news} setNews={setNews} />
-          <BlogPanel token={token} blogs={blogs} setBlogs={setBlogs} />
-          <TeamPanel token={token} team={team} setTeam={setTeam} />
+          <PublicationPanel token={token} publications={publications} setPublications={setPublications} refreshSiteData={refreshSiteData} />
+          <NewsPanel token={token} news={news} setNews={setNews} refreshSiteData={refreshSiteData} />
+          <BlogPanel token={token} blogs={blogs} setBlogs={setBlogs} refreshSiteData={refreshSiteData} />
+          <TeamPanel token={token} team={team} setTeam={setTeam} refreshSiteData={refreshSiteData} />
         </div>
       </div>
     </div>
@@ -84,7 +85,7 @@ function Stat({ label, value }) {
 }
 
 /* ---------------- Publications ---------------- */
-function PublicationPanel({ token, publications, setPublications }) {
+function PublicationPanel({ token, publications, setPublications, refreshSiteData }) {
   const empty = { title: '', meta: '', abstract: '' };
   const [form, setForm] = useState(empty);
   const [file, setFile] = useState(null);
@@ -107,6 +108,7 @@ function PublicationPanel({ token, publications, setPublications }) {
         setStatus('Saving…');
         const updated = await api.updatePublication(editingId, { ...form, tag: THEME_NAME }, token);
         setPublications((prev) => prev.map((p) => (p.id === editingId ? updated : p)));
+        await refreshSiteData();
         setStatus('Saved.');
         cancelEdit();
       } else {
@@ -116,6 +118,7 @@ function PublicationPanel({ token, publications, setPublications }) {
         if (file) fd.append('file', file);
         const entry = await api.addPublication(fd, token);
         setPublications((prev) => [...prev, entry]);
+        await refreshSiteData();
         setStatus('Published.');
         setForm(empty); setFile(null);
       }
@@ -128,6 +131,7 @@ function PublicationPanel({ token, publications, setPublications }) {
     try {
       await api.deletePublication(id, token);
       setPublications((prev) => prev.filter((p) => p.id !== id));
+      await refreshSiteData();
       if (editingId === id) cancelEdit();
     } catch (err) {
       alert('Could not remove this — ' + err.message);
@@ -167,7 +171,7 @@ function PublicationPanel({ token, publications, setPublications }) {
 }
 
 /* ---------------- News ---------------- */
-function NewsPanel({ token, news, setNews }) {
+function NewsPanel({ token, news, setNews, refreshSiteData }) {
   const empty = { title: '', body: '' };
   const [form, setForm] = useState(empty);
   const [editingId, setEditingId] = useState(null);
@@ -183,11 +187,13 @@ function NewsPanel({ token, news, setNews }) {
         setStatus('Saving…');
         const updated = await api.updateNews(editingId, form, token);
         setNews((prev) => prev.map((n) => (n.id === editingId ? updated : n)));
+        await refreshSiteData();
         setStatus('Saved.'); cancelEdit();
       } else {
         setStatus('Publishing…');
         const entry = await api.addNews(form, token);
         setNews((prev) => [...prev, entry]);
+        await refreshSiteData();
         setStatus('Published.'); setForm(empty);
       }
     } catch (err) { setStatus('Could not save — ' + err.message); }
@@ -197,6 +203,7 @@ function NewsPanel({ token, news, setNews }) {
     try {
       await api.deleteNews(id, token);
       setNews((prev) => prev.filter((n) => n.id !== id));
+      await refreshSiteData();
       if (editingId === id) cancelEdit();
     } catch (err) { alert('Could not remove this — ' + err.message); }
   }
@@ -226,7 +233,7 @@ function NewsPanel({ token, news, setNews }) {
 }
 
 /* ---------------- Blogs ---------------- */
-function BlogPanel({ token, blogs, setBlogs }) {
+function BlogPanel({ token, blogs, setBlogs, refreshSiteData }) {
   const empty = { title: '', read: '', body: '' };
   const [form, setForm] = useState(empty);
   const [editingId, setEditingId] = useState(null);
@@ -243,11 +250,13 @@ function BlogPanel({ token, blogs, setBlogs }) {
         setStatus('Saving…');
         const updated = await api.updateBlog(editingId, payload, token);
         setBlogs((prev) => prev.map((b) => (b.id === editingId ? updated : b)));
+        await refreshSiteData();
         setStatus('Saved.'); cancelEdit();
       } else {
         setStatus('Publishing…');
         const entry = await api.addBlog(payload, token);
         setBlogs((prev) => [...prev, entry]);
+        await refreshSiteData();
         setStatus('Published.'); setForm(empty);
       }
     } catch (err) { setStatus('Could not save — ' + err.message); }
@@ -257,6 +266,7 @@ function BlogPanel({ token, blogs, setBlogs }) {
     try {
       await api.deleteBlog(id, token);
       setBlogs((prev) => prev.filter((b) => b.id !== id));
+      await refreshSiteData();
       if (editingId === id) cancelEdit();
     } catch (err) { alert('Could not remove this — ' + err.message); }
   }
@@ -287,7 +297,7 @@ function BlogPanel({ token, blogs, setBlogs }) {
 }
 
 /* ---------------- Team ---------------- */
-function TeamPanel({ token, team, setTeam }) {
+function TeamPanel({ token, team, setTeam, refreshSiteData }) {
   const empty = { name: '', group: GROUPS[0], role: '', focus: '' };
   const [form, setForm] = useState(empty);
   const [photo, setPhoto] = useState(null);
@@ -305,6 +315,7 @@ function TeamPanel({ token, team, setTeam }) {
         setStatus('Saving…');
         const updated = await api.updateMember(editingId, form, token);
         setTeam((prev) => prev.map((m) => (m.id === editingId ? updated : m)));
+        await refreshSiteData();
         setStatus('Saved.'); cancelEdit();
       } else {
         setStatus(photo ? 'Uploading…' : 'Adding…');
@@ -313,6 +324,7 @@ function TeamPanel({ token, team, setTeam }) {
         if (photo) fd.append('photo', photo);
         const entry = await api.addMember(fd, token);
         setTeam((prev) => [...prev, entry]);
+        await refreshSiteData();
         setStatus('Added.'); setForm(empty); setPhoto(null);
       }
     } catch (err) { setStatus('Could not save — ' + err.message); }
@@ -322,6 +334,7 @@ function TeamPanel({ token, team, setTeam }) {
     try {
       await api.deleteMember(id, token);
       setTeam((prev) => prev.filter((m) => m.id !== id));
+      await refreshSiteData();
       if (editingId === id) cancelEdit();
     } catch (err) { alert('Could not remove this — ' + err.message); }
   }

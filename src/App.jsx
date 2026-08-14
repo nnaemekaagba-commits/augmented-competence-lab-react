@@ -17,18 +17,24 @@ export default function App() {
   const [team, setTeam] = useState([]);
   const [apiError, setApiError] = useState(false);
 
+  async function refreshSiteData() {
+    try {
+      const [pubs, newsData, blogData, teamData] = await Promise.all([
+        api.getPublications(), api.getNews(), api.getBlogs(), api.getTeam(),
+      ]);
+      setPublications(pubs);
+      setNews(newsData);
+      setBlogs(blogData);
+      setTeam(teamData);
+      setApiError(false);
+    } catch (err) {
+      console.error('Could not reach the API at ' + API_BASE_URL, err);
+      setApiError(true);
+    }
+  }
+
   useEffect(() => {
-    (async () => {
-      try {
-        const [pubs, newsData, blogData, teamData] = await Promise.all([
-          api.getPublications(), api.getNews(), api.getBlogs(), api.getTeam(),
-        ]);
-        setPublications(pubs); setNews(newsData); setBlogs(blogData); setTeam(teamData);
-      } catch (err) {
-        console.error('Could not reach the API at ' + API_BASE_URL, err);
-        setApiError(true);
-      }
-    })();
+    refreshSiteData();
   }, []);
 
   // All sections stay mounted at once (shown/hidden via CSS), so Admin's
@@ -67,6 +73,7 @@ export default function App() {
           news={news} setNews={setNews}
           blogs={blogs} setBlogs={setBlogs}
           team={team} setTeam={setTeam}
+          refreshSiteData={refreshSiteData}
         />
       </section>
 
