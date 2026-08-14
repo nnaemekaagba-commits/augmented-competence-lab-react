@@ -3,7 +3,13 @@
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://your-api-domain.com/api';
 
 async function apiGet(path) {
-  const res = await fetch(API_BASE_URL + path);
+  const res = await fetch(API_BASE_URL + path, {
+    cache: 'no-store',
+    headers: {
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      Pragma: 'no-cache',
+    },
+  });
   if (!res.ok) throw new Error('Request failed: ' + res.status);
   return res.json();
 }

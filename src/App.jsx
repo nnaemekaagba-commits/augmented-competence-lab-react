@@ -37,6 +37,21 @@ export default function App() {
     refreshSiteData();
   }, []);
 
+  useEffect(() => {
+    if (view !== 'admin') {
+      refreshSiteData();
+    }
+  }, [view]);
+
+  useEffect(() => {
+    function handleFocus() {
+      refreshSiteData();
+    }
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, []);
+
   // All sections stay mounted at once (shown/hidden via CSS), so Admin's
   // login state survives switching tabs — same behavior as the static version.
   return (
