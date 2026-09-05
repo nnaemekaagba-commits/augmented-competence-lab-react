@@ -92,7 +92,7 @@ export default function App() {
         />
       </section>
 
-      <footer>Augmented Competence Lab &nbsp;·&nbsp; Advancing Human-System Interaction, System Thinking, and Problem-solving for STEM Education and Lifelong Learning</footer>
+      <footer>© Augmented Competence Lab (2026)</footer>
     </>
   );
 }
