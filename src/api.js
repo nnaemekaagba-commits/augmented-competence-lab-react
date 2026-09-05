@@ -24,10 +24,16 @@ async function apiGet(path) {
 }
 
 export function publicationFileUrl(id) {
+  if (fallbackContent.publications.some((item) => item.id === id)) {
+    return `${PUBLIC_BASE}content/publications/${id}.pdf`;
+  }
   return HAS_REMOTE_API ? `${API_BASE_URL}/publications/${id}/file` : `${PUBLIC_BASE}content/publications/${id}.pdf`;
 }
 
 export function teamPhotoUrl(id) {
+  if (fallbackContent.team.some((item) => item.id === id)) {
+    return `${PUBLIC_BASE}content/team/${id}.jpg`;
+  }
   return HAS_REMOTE_API ? `${API_BASE_URL}/team/${id}/photo` : `${PUBLIC_BASE}content/team/${id}.jpg`;
 }
 
