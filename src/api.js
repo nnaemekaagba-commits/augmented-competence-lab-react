@@ -6,15 +6,21 @@ const PUBLIC_BASE = import.meta.env.BASE_URL;
 
 async function apiGet(path) {
   if (!HAS_REMOTE_API) return fallbackContent[path.slice(1)] || [];
-  const res = await fetch(API_BASE_URL + path, {
-    cache: 'no-store',
-    headers: {
-      'Cache-Control': 'no-cache, no-store, must-revalidate',
-      Pragma: 'no-cache',
-    },
-  });
-  if (!res.ok) throw new Error('Request failed: ' + res.status);
-  return res.json();
+  try {
+    const res = await fetch(API_BASE_URL + path, {
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        Pragma: 'no-cache',
+      },
+    });
+    if (!res.ok) throw new Error('Request failed: ' + res.status);
+    return await res.json();
+  } catch (error) {
+    const fallback = fallbackContent[path.slice(1)];
+    if (fallback) return fallback;
+    throw error;
+  }
 }
 
 export function publicationFileUrl(id) {
