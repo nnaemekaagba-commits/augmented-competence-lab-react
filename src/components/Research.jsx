@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { API_BASE_URL } from '../api.js';
+import { publicationFileUrl } from '../api.js';
 
 export default function Research({ publications }) {
   const [activePublication, setActivePublication] = useState(null);
@@ -54,7 +54,7 @@ export default function Research({ publications }) {
               <iframe
                 className="pdf-frame"
                 title={activePublication.title}
-                src={`${API_BASE_URL}/publications/${activePublication.id}/file#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
+                src={`${publicationFileUrl(activePublication.id)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
               ></iframe>
             </div>
             <p className="pdf-disclaimer">

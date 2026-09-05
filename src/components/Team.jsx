@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '../api.js';
+import { teamPhotoUrl } from '../api.js';
 
 const GROUP_ORDER = [
   'Principal Investigator',
@@ -34,7 +34,7 @@ export default function Team({ team }) {
               <div className="member" key={m.id}>
                 <div className="avatar">
                   {m.hasPhoto ? (
-                    <img src={`${API_BASE_URL}/team/${m.id}/photo`} alt={m.name} />
+                    <img src={teamPhotoUrl(m.id)} alt={m.name} />
                   ) : (
                     initials(m.name)
                   )}

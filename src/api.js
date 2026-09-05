@@ -1,8 +1,11 @@
-// Set VITE_API_BASE_URL in your .env file to wherever the backend is deployed.
-// Locally that's usually http://localhost:4000/api.
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://your-api-domain.com/api';
+import { fallbackContent } from './fallbackContent';
+
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+export const HAS_REMOTE_API = Boolean(import.meta.env.VITE_API_BASE_URL);
+const PUBLIC_BASE = import.meta.env.BASE_URL;
 
 async function apiGet(path) {
+  if (!HAS_REMOTE_API) return fallbackContent[path.slice(1)] || [];
   const res = await fetch(API_BASE_URL + path, {
     cache: 'no-store',
     headers: {
@@ -12,6 +15,14 @@ async function apiGet(path) {
   });
   if (!res.ok) throw new Error('Request failed: ' + res.status);
   return res.json();
+}
+
+export function publicationFileUrl(id) {
+  return HAS_REMOTE_API ? `${API_BASE_URL}/publications/${id}/file` : `${PUBLIC_BASE}content/publications/${id}.pdf`;
+}
+
+export function teamPhotoUrl(id) {
+  return HAS_REMOTE_API ? `${API_BASE_URL}/team/${id}/photo` : `${PUBLIC_BASE}content/team/${id}.jpg`;
 }
 
 async function apiPostJson(path, body, token) {
