@@ -1,12 +1,12 @@
 import { ReasoningNode, HeroTrace } from './Icons.jsx';
 import { monthYear } from '../api.js';
 
-export const THEME_NAME = 'Human-System Teaming';
+export const THEME_NAME = 'Learning Tools, Learning Resources, and Self-Directed Learning';
 const THEME = {
   name: THEME_NAME,
-  blurb: 'How people and interactive systems — AI included, but not AI alone — coordinate, reason, and solve problems together.',
+  blurb: 'Understanding learners’ needs and challenges and developing tools and resources to solve their learning challenges.',
 };
-const FACETS = ['Learning', 'Reasoning', 'Problem-solving'];
+const FACETS = ['Learning Tools', 'Learning Resources', 'Self-Directed Learning'];
 
 export default function Home({ setView, publications, news, blogs }) {
   const latestPub = publications[publications.length - 1];

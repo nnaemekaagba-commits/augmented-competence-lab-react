@@ -9,7 +9,7 @@ export default function Research({ publications }) {
       <div className="page-head">
         <div className="eyebrow"><span className="node"></span>Research and Publication</div>
         <h2>Papers, projects, and preprints.</h2>
-        <p>All work here sits under one research theme — Human-System Teaming.</p>
+        <p>Our work focuses on learning tools, learning resources, and self-directed learning.</p>
       </div>
       <div className="pub-list">
         {publications.length === 0 && (
