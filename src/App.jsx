@@ -92,7 +92,7 @@ export default function App() {
         />
       </section>
 
-      <footer>© Augmented Competence Lab (2026)</footer>
+      <footer>© DART-SDL — Developing and Adapting Resources and Tools for Self-Directed Learning (2026)</footer>
     </>
   );
 }

@@ -19,10 +19,10 @@ export default function Home({ setView, publications, news, blogs }) {
         <div className="hero-trace"><HeroTrace /></div>
         <div className="hero-inner">
           <div className="hero-top">
-            <div className="hero-logo"><img src="/logo-icon.png" alt="Augmented Competence Lab" /></div>
+            <div className="hero-logo"><img src="/logo-icon.png" alt="DART-SDL" /></div>
             <div className="hero-title-block">
-              <h1>Augmented Competence Lab</h1>
-              <p>Advancing Human-System interaction, System Thinking, and Problem-solving for STEM Education and Lifelong Learning.</p>
+              <h1>DART-SDL</h1>
+              <p>Developing and Adapting Resources and Tools for Self-Directed Learning</p>
             </div>
           </div>
           <div className="hero-nav-echo">

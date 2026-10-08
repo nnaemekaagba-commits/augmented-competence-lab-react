@@ -1,7 +1,7 @@
 {
   "name": "augmented-competence-lab-web",
   "version": "1.0.0",
-  "description": "Augmented Competence Lab website — React front-end, talking to the lab API.",
+  "description": "DART-SDL website — Developing and Adapting Resources and Tools for Self-Directed Learning.",
   "type": "module",
   "scripts": {
     "dev": "vite",

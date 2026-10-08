@@ -1,4 +1,4 @@
-# Augmented Competence Lab - React front-end
+# DART-SDL - React front-end
 
 The same site as before, rebuilt in React (Vite), talking to the backend API in `augmented-competence-lab-backend`. Tested end-to-end before delivery: built cleanly, served correctly, and a full login -> create -> edit -> delete cycle was run against a live copy of the backend.
 

@@ -30,8 +30,8 @@ export default function Header({ view, setView }) {
           onClick={() => go('home')}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go('home'); } }}
         >
-          <span className="mark"><img src="/logo-icon.png" alt="Augmented Competence Lab" /></span>
-          <span className="name">Augmented Competence Lab</span>
+          <span className="mark"><img src="/logo-icon.png" alt="DART-SDL" /></span>
+          <span className="name">DART-SDL</span>
         </div>
 
         <div className="nav-right">
