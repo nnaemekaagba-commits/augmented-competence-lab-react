@@ -30,7 +30,7 @@ export default function Header({ view, setView }) {
           onClick={() => go('home')}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go('home'); } }}
         >
-          <span className="mark"><img src="/logo-icon.png" alt="DART-SDL" /></span>
+          <span className="mark"><img src="/logo-dart-sdl.png" alt="DART-SDL target and pen logo" /></span>
           <span className="name">DART-SDL</span>
         </div>
 

@@ -19,7 +19,7 @@ export default function Home({ setView, publications, news, blogs }) {
         <div className="hero-trace"><HeroTrace /></div>
         <div className="hero-inner">
           <div className="hero-top">
-            <div className="hero-logo"><img src="/logo-icon.png" alt="DART-SDL" /></div>
+            <div className="hero-logo"><img src="/logo-dart-sdl.png" alt="DART-SDL target and pen logo" /></div>
             <div className="hero-title-block">
               <h1>DART-SDL</h1>
               <p>Developing and Adapting Resources and Tools for Self-Directed Learning</p>
