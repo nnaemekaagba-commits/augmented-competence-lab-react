@@ -4,7 +4,7 @@ import { monthYear } from '../api.js';
 export const THEME_NAME = 'Learning Tools, Learning Resources, and Self-Directed Learning';
 const THEME = {
   name: THEME_NAME,
-  blurb: 'Understanding learners’ needs and challenges and developing tools and resources to solve their learning challenges.',
+  blurb: 'Understanding how students use—or can use—learning tools and resources to address their learning challenges.',
 };
 const FACETS = ['Learning Tools', 'Learning Resources', 'Self-Directed Learning'];
 
