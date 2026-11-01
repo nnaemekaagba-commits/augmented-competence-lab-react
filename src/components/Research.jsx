@@ -1,8 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { publicationFileUrl } from '../api.js';
+
+function TextBlocks({ text }) {
+  return String(text || '').split(/\r?\n+/).filter(Boolean).map((paragraph, index) => <p key={index}>{paragraph}</p>);
+}
 
 export default function Research({ publications }) {
   const [activePublication, setActivePublication] = useState(null);
+  const [showPdf, setShowPdf] = useState(false);
+  function closePublication() { setActivePublication(null); setShowPdf(false); }
+
+  useEffect(() => {
+    function onKeyDown(event) { if (event.key === 'Escape') closePublication(); }
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
 
   return (
     <>
@@ -12,55 +24,55 @@ export default function Research({ publications }) {
         <p>Our work focuses on learning tools, learning resources, and self-directed learning.</p>
       </div>
       <div className="pub-list">
-        {publications.length === 0 && (
-          <div className="pub-card"><p>No entries yet.</p></div>
-        )}
-        {publications.slice().reverse().map((p) => (
-          <div className="pub-card" key={p.id}>
+        {publications.length === 0 && <div className="pub-card"><p>No entries yet.</p></div>}
+        {publications.slice().reverse().map((publication) => (
+          <article className="pub-card" key={publication.id}>
             <div className="pub-main">
-              <div className="pub-tag">{p.tag}</div>
-              <h3>{p.title}</h3>
-              <div className="pub-meta">{p.meta}</div>
-              <div className="pub-abstract">{p.abstract}</div>
+              <div className="pub-tag">{publication.tag}</div>
+              <h3>{publication.title}</h3>
+              <div className="pub-meta">{publication.meta}</div>
+              <div className="pub-abstract pub-preview">{publication.abstract}</div>
             </div>
-            {p.hasFile ? (
-              <div className="pub-actions">
-                <div className="pub-note">Read-only viewer</div>
-                <button className="pub-link" type="button" onClick={() => setActivePublication(p)}>
-                  Read paper
-                </button>
-              </div>
-            ) : (
-              <span className="pub-link" style={{ opacity: 0.45, cursor: 'default' }}>No file</span>
-            )}
-          </div>
+            <div className="pub-actions">
+              <div className="pub-note">HTML summary</div>
+              <button className="pub-link" type="button" onClick={() => { setActivePublication(publication); setShowPdf(false); }}>View details</button>
+            </div>
+          </article>
         ))}
       </div>
+
       {activePublication ? (
-        <div className="pdf-modal-shell" role="dialog" aria-modal="true" aria-labelledby="pdf-reader-title">
-          <div className="pdf-modal-backdrop" onClick={() => setActivePublication(null)}></div>
-          <div className="pdf-modal">
-            <div className="pdf-modal-head">
+        <div className="detail-shell" role="dialog" aria-modal="true" aria-labelledby="publication-title">
+          <button className="detail-backdrop" onClick={closePublication} aria-label="Close publication details"></button>
+          <article className="detail-panel publication-detail">
+            <header className="detail-head">
               <div>
-                <div className="eyebrow"><span className="node"></span>Research paper</div>
-                <h3 id="pdf-reader-title">{activePublication.title}</h3>
-                <p>{activePublication.meta}</p>
+                <div className="eyebrow"><span className="node"></span>{activePublication.tag || 'Research publication'}</div>
+                <h2 id="publication-title">{activePublication.title}</h2>
+                <p className="detail-citation">{activePublication.meta}</p>
               </div>
-              <button className="pdf-close" type="button" onClick={() => setActivePublication(null)} aria-label="Close paper viewer">
-                Close
-              </button>
+              <button className="detail-close" type="button" onClick={closePublication}>Close</button>
+            </header>
+            <div className="detail-toolbar">
+              <button className={!showPdf ? 'active' : ''} type="button" onClick={() => setShowPdf(false)}>HTML overview</button>
+              {activePublication.hasFile ? <button className={showPdf ? 'active' : ''} type="button" onClick={() => setShowPdf(true)}>Original PDF</button> : null}
+              {activePublication.hasFile ? <a href={publicationFileUrl(activePublication.id)} target="_blank" rel="noreferrer">Open in new tab ↗</a> : null}
             </div>
-            <div className="pdf-frame-wrap">
-              <iframe
-                className="pdf-frame"
-                title={activePublication.title}
-                src={`${publicationFileUrl(activePublication.id)}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
-              ></iframe>
-            </div>
-            <p className="pdf-disclaimer">
-              This view is presented inline for reading. A determined visitor can still save the file from the browser or network tools, so this is a best-effort read-only experience rather than hard DRM.
-            </p>
-          </div>
+            {showPdf && activePublication.hasFile ? (
+              <div className="detail-pdf-wrap"><iframe className="detail-pdf" title={activePublication.title} src={`${publicationFileUrl(activePublication.id)}#view=FitH`}></iframe></div>
+            ) : (
+              <div className="publication-body">
+                <aside className="publication-aside">
+                  <span>Publication type</span><strong>{activePublication.tag || 'Research paper'}</strong>
+                  <span>Available format</span><strong>{activePublication.hasFile ? 'HTML overview + PDF' : 'HTML overview'}</strong>
+                </aside>
+                <section className="publication-copy">
+                  <div className="section-kicker">Abstract</div>
+                  <TextBlocks text={activePublication.abstract} />
+                </section>
+              </div>
+            )}
+          </article>
         </div>
       ) : null}
     </>
