@@ -95,7 +95,7 @@ export default function Home({ setView, publications, news, blogs }) {
       </div>
 
       <div className="cta-band">
-        <h2>See how we study human-system teaming.</h2>
+        <h2>See how students use—or can use—learning tools and resources.</h2>
         <div className="row">
           <button className="btn-mint" onClick={() => setView('research')}>Browse research</button>
           <button className="btn-ghost-navy" onClick={() => setView('team')}>Meet the team</button>
